@@ -5,7 +5,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
 public class TruckDriver {
-    double fuel = 20;
+    int fuel = 20;
     int added_fuel = 0;
     int truckX = 50;
     int truckY = 100;
