@@ -2,9 +2,11 @@ package com.mygdx.game.screens.playingScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.TestGame;
 import com.mygdx.game.screens.playingScreen.components.TruckDriver;
@@ -23,8 +25,16 @@ public class PlayingScreen implements Screen {
     final Texture truckTexture;
     final TruckDriver truck;
     final MyInputProcessor inputProcessor;
-    public PlayingScreen(final TestGame game) {
+    private String chosenFlavor;
+    private int numberOfIceCreams;
+    private BitmapFont font;
+    public PlayingScreen(final TestGame game, String chosenFlavor, int numberOfIceCreams) {
         this.game = game;
+        this.chosenFlavor = chosenFlavor;
+        this.numberOfIceCreams = numberOfIceCreams;
+        font = new BitmapFont();
+        font.setColor(Color.WHITE); // Set font color
+        font.getData().setScale(1.5f); // Scale the font size
         truck = new TruckDriver(4, 4);
         pixmapOrig = new Pixmap(Gdx.files.internal("map.png"));  // Dimensions: 1060x x 710px
         mapWidth = 1060 / 4;
@@ -70,11 +80,16 @@ public class PlayingScreen implements Screen {
 
         game.batch.draw(backgroundMap, 0, 0);
         game.batch.draw(truckTexture, truck.truckX, truck.truckY);
+
+        // Draw the flavor and number of ice creams
+        String flavorText = "Flavor: " + chosenFlavor;
+        String numIceCreamsText = "Number of Ice Creams: " + numberOfIceCreams;
+        font.draw(game.batch, flavorText, 20, Gdx.graphics.getHeight() - 20); // Position the text on the screen
+        font.draw(game.batch, numIceCreamsText, 20, Gdx.graphics.getHeight() - 50); // Adjust position as needed
+
         game.batch.end();
-
-
-
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -106,5 +121,6 @@ public class PlayingScreen implements Screen {
             }
         }
         truckTexture.dispose();
+        font.dispose();
     }
 }

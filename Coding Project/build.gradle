@@ -54,9 +54,10 @@ project(":desktop") {
 project(":core") {
     apply plugin: "java-library"
 
-
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        
+        // Add jxmapviewer2 dependency
+        implementation 'org.jxmapviewer:jxmapviewer2:2.3'
     }
 }
+
