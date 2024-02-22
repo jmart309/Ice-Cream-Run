@@ -79,7 +79,7 @@ public class WelcomeScreen implements Screen {
         vanillaButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Add logic for Vanilla button click
+                // Add logic for Vanilla button click.
             }
         });
 
