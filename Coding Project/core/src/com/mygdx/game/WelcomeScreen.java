@@ -104,8 +104,6 @@ public class WelcomeScreen implements Screen {
         stage.addActor(playButton);
     }
 
-    // Rest of the methods (render, resize, pause, resume, hide, dispose) can remain as is
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
