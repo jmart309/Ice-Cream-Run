@@ -54,7 +54,7 @@ public class PlayingScreen implements Screen {
 //        pixmapScaled.dispose();
 
         backgroundMap = mapSegments[truck.truckRow][truck.truckCol];
-        truckTexture = new Texture(Gdx.files.internal("better_truck.png"));
+        truckTexture = new Texture(Gdx.files.internal("iscream_truck.png"));
 
         inputProcessor = new MyInputProcessor(truck);
         Gdx.input.setInputProcessor(inputProcessor);
@@ -73,7 +73,6 @@ public class PlayingScreen implements Screen {
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-        System.out.printf("%d, %d%n", truck.truckRow, truck.truckCol);
         backgroundMap = mapSegments[truck.truckRow][truck.truckCol];
 
         game.batch.begin();
