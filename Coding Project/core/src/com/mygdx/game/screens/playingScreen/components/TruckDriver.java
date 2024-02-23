@@ -1,6 +1,7 @@
 package com.mygdx.game.screens.playingScreen.components;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -8,7 +9,7 @@ import java.awt.event.KeyEvent;
 import java.lang.reflect.Array;
 
 public class TruckDriver {
-    int fuel = 20;
+    public int fuel;
     int added_fuel = 0;
     public int truckX = 50; // x-coordinate on the map segment
     public int truckY = 100; // y-coordinate on the map segment
@@ -31,6 +32,7 @@ public class TruckDriver {
         truckRow = 2;
         truckCol = 0;
         mapGrid[truckRow][truckCol] = true; // Starting position
+        this.fuel =  100;
 
     }
 
@@ -38,29 +40,29 @@ public class TruckDriver {
         // Check if "W" key is pressed
         if (keycode == Input.Keys.W) {
             // Move the truck upwards on W & decrease fuel as we move
-            truckY += 100;
-            fuel = fuel--;
-            System.out.println("Truck moved Up 100");
+            truckY += 30;
+            fuel -= 1;
+            System.out.println("Truck moved up 30");
         }
 
         if (keycode == Input.Keys.D) {
             // Move the truck straight on D
-            truckX += 100;
-            fuel = fuel--;
-            System.out.println("Truck moved right 100");
+            truckX += 30;
+            fuel -= 1;
+            System.out.println("Truck moved right 30");
         }
 
         if (keycode == Input.Keys.S) {
             // Move the truck to Downwards with S
-            truckY -= 100;
-            fuel = fuel--;
-            System.out.println("Truck moved down 100");
+            truckY -= 30;
+            fuel -= 1;
+            System.out.println("Truck moved down 30");
         }
 
         if (keycode == Input.Keys.A){
-            truckX -=100;
-            fuel = fuel--;
-            System.out.println("Truck moves left 100");
+            truckX -= 30;
+            fuel -= 1;
+            System.out.println("Truck moves left 30");
         }
         return true;
     }
