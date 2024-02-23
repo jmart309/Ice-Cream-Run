@@ -38,26 +38,29 @@ public class TruckDriver {
         // Check if "W" key is pressed
         if (keycode == Input.Keys.W) {
             // Move the truck upwards on W & decrease fuel as we move
-            truckX = 100;
-            truckY = 150;
+            truckY += 100;
             fuel = fuel--;
-            System.out.println("Truck moved to (200, 200)");
+            System.out.println("Truck moved Up 100");
         }
 
         if (keycode == Input.Keys.D) {
             // Move the truck straight on D
-            truckX = 100;
-            truckY = 100;
+            truckX += 100;
             fuel = fuel--;
-            System.out.println("Truck moved to (200, 200)");
+            System.out.println("Truck moved right 100");
         }
 
         if (keycode == Input.Keys.S) {
             // Move the truck to Downwards with S
-            truckX = 100;
-            truckY = 50;
+            truckY -= 100;
             fuel = fuel--;
-            System.out.println("Truck moved to (200, 200)");
+            System.out.println("Truck moved down 100");
+        }
+
+        if (keycode == Input.Keys.A){
+            truckX -=100;
+            fuel = fuel--;
+            System.out.println("Truck moves left 100");
         }
         return true;
     }

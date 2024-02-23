@@ -13,7 +13,7 @@ public class MyInputProcessor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
-//            case Input.Keys.A:
+            case Input.Keys.A:
             case Input.Keys.W:
             case Input.Keys.D:
             case Input.Keys.S:

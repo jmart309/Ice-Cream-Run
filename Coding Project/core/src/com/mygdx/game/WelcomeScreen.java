@@ -110,8 +110,8 @@ public class WelcomeScreen implements Screen {
                 String username = usernameField.getText();
                 String password = passwordField.getText();
                 // You can add your logic here for handling the username and password
-                // game.setScreen(new PlayingScreen(game, chosenFlavor, numberOfIceCreams)); // THIS WILL LEAD US TO VERSION 1 OF GAMEPLAY
-                MapViewer.main(); // THIS WILL LEAD US TO OPENSTREEMAPS.
+                game.setScreen(new PlayingScreen(game, chosenFlavor, numberOfIceCreams)); // THIS WILL LEAD US TO VERSION 1 OF GAMEPLAY
+                //MapViewer.main(); // THIS WILL LEAD US TO OPENSTREEMAPS.
             }
         });
 
