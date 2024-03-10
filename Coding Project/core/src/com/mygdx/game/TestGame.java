@@ -20,6 +20,7 @@ public class TestGame extends Game {
 
     @Override
     public void dispose() {
+        super.dispose();
         batch.dispose();
         // Don't forget to dispose of other assets as needed
     }
