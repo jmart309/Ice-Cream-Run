@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -36,7 +39,7 @@ public class PlayingScreen implements Screen {
     private int counter = 0;
 
     // Background map
-    public TiledMap map = new TmxMapLoader().load("testBackground.tmx");
+    public TiledMap map = new TmxMapLoader().load("testBackground.tmx"); // 18 rows x 32 cols
     public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, 1);
 
 
@@ -60,10 +63,15 @@ public class PlayingScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         renderer.setView(camera);
-        MapLayer layer = map.getLayers().get("ground");
-        System.out.println(layer);
-        MapObjects objects = layer.getObjects();
-        objects.forEach(System.out::println);
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("ground");
+        for (int i = 0; i < 18; i++) {
+            for (int j = 0; j < 32; j++) {
+                Cell cell = layer.getCell(j, i);
+                TiledMapTile tile = cell.getTile();
+                System.out.print(tile.getId() + " ");
+            }
+            System.out.println();
+        }
     }
     @Override
     public void show() {
@@ -143,6 +151,8 @@ public class PlayingScreen implements Screen {
 
     @Override
     public void dispose() {
+        map.dispose();
+
         truckTexture.dispose();
         font.dispose();
     }
