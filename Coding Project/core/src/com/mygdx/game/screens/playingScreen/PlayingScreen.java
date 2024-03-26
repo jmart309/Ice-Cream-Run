@@ -53,8 +53,18 @@ public class PlayingScreen implements Screen {
         font = new BitmapFont();
         font.setColor(Color.WHITE); // Set font color
         font.getData().setScale(1.5f); // Scale the font size
-        truck = new TruckDriver(4, 4);
+        //truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.getLayers().get(1));
         truckTexture = new Texture(Gdx.files.internal("iscream_truck.png"));
+        //float truckWidth = truckTexture.getWidth() / 3;
+        //float truckHeight = truckTexture.getHeight() / 3;
+
+        float truckWidth = 31;
+        float truckHeight = 31;
+
+        System.out.println(truckWidth);
+        System.out.println(truckHeight);
+
+        truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth);
 
         inputProcessor = new MyInputProcessor(truck);
         Gdx.input.setInputProcessor(inputProcessor);
@@ -93,8 +103,8 @@ public class PlayingScreen implements Screen {
 
         /* Batch drawing starts */
         game.batch.begin();
-        float truckWidth = truckTexture.getWidth() / 3;
-        float truckHeight = truckTexture.getHeight() / 3;
+        float truckWidth = 31;
+        float truckHeight = 31;
         game.batch.draw(truckTexture, truck.truckX, truck.truckY, truckWidth, truckHeight);
 
 
