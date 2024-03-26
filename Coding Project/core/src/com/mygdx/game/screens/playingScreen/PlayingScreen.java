@@ -56,7 +56,6 @@ public class PlayingScreen implements Screen {
         font = new BitmapFont();
         font.setColor(Color.WHITE); // Set font color
         font.getData().setScale(1.5f); // Scale the font size
-        //truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.getLayers().get(1));
         truckTexture = new Texture(Gdx.files.internal("iscream_truck.png"));
         //float truckWidth = truckTexture.getWidth() / 3;
         //float truckHeight = truckTexture.getHeight() / 3;
@@ -64,28 +63,23 @@ public class PlayingScreen implements Screen {
         float truckWidth = 31;
         float truckHeight = 31;
 
-        System.out.println(truckWidth);
-        System.out.println(truckHeight);
-
-        truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth);
+        truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.map.getLayers().get("ground"), truckHeight, truckWidth);
 
         inputProcessor = new MyInputProcessor(truck);
         Gdx.input.setInputProcessor(inputProcessor);
 
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         renderer.setView(camera);
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.map.getLayers().get("ground");
-        for (int i = 0; i < 18; i++) {
-            for (int j = 0; j < 32; j++) {
-                Cell cell = layer.getCell(j, i);
-                TiledMapTile tile = cell.getTile();
-
-                System.out.print(tile.getId() + " ");
-            }
-            System.out.println();
-        }
+//        TiledMapTileLayer layer = (TiledMapTileLayer) map.map.getLayers().get("ground");
+//        for (int i = 0; i < 18; i++) {
+//            for (int j = 0; j < 32; j++) {
+//                Cell cell = layer.getCell(j, i);
+//                TiledMapTile tile = cell.getTile();
+//                System.out.print(tile.getId() + " ");
+//            }
+//            System.out.println();
+//        }
     }
     @Override
     public void show() {

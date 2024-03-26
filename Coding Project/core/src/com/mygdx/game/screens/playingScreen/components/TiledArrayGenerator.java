@@ -24,7 +24,7 @@ public class TiledArrayGenerator extends Gdx {
     }
 
     public TiledArrayGenerator() {
-        // Window size: 1024 x 672
+        // Window size: 1280 x 704
         int width = 40;
         int height = 22;
         int horizontalMainRoad = 10;
@@ -41,7 +41,7 @@ public class TiledArrayGenerator extends Gdx {
         storeTiles = new Texture(Gdx.files.internal("sheet.png"));
         TextureRegion[][] storeTS = TextureRegion.split(storeTiles, 32, 32);
         StaticTiledMapTile roadTile = new StaticTiledMapTile(floorTS[59][21]);
-        roadTile.getProperties().put("road", true);
+        roadTile.getProperties().put("blocked", true);
 
         map = new TiledMap();
         MapLayers layers = map.getLayers();
@@ -75,11 +75,13 @@ public class TiledArrayGenerator extends Gdx {
 //                int nextLength = (int) (prevLength * scalingFactor);
                 int nextLength = prevLength - 8;
                 leftBound += 3 + (int) (Math.random() * 2); // new leftbound
-                layer = connectToMid(leftBound, direction * (3 * (j + 1)) + horizontalMainRoad, horizontalMainRoad, direction * -1, roadCell, layer);
+                layer = connectToMid(leftBound, direction * (3 * (j + 1)) + horizontalMainRoad,
+                        horizontalMainRoad, direction * -1, roadCell, layer);
                 for (int k = 0; k < nextLength; k++) {
                     layer.setCell(leftBound + k, direction * (3 * (j + 1)) + horizontalMainRoad, roadCell);
                 }
-                layer = connectToMid(leftBound + nextLength - 1, direction * (3 * (j + 1)) + horizontalMainRoad, horizontalMainRoad, direction * -1, roadCell, layer);
+                layer = connectToMid(leftBound + nextLength - 1, direction * (3 * (j + 1)) + horizontalMainRoad,
+                        horizontalMainRoad, direction * -1, roadCell, layer);
                 prevLength = nextLength;
 
             }
