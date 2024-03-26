@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("IceCreamRun");
-		config.setWindowedMode(1024, 576);
+		config.setWindowedMode(1280, 704);
 		new Lwjgl3Application(new TestGame(), config);
 	}
 }

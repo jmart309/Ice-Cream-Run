@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.TestGame;
+import com.mygdx.game.screens.playingScreen.components.TiledArrayGenerator;
 import com.mygdx.game.screens.playingScreen.components.TruckDriver;
 import com.mygdx.game.screens.playingScreen.components.MyInputProcessor;
 
@@ -39,8 +40,10 @@ public class PlayingScreen implements Screen {
     private int counter = 0;
 
     // Background map
-    public TiledMap map = new TmxMapLoader().load("testBackground.tmx"); // 18 rows x 32 cols
-    public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, 1);
+//    public TiledMap map = new TmxMapLoader().load("testBackground.tmx"); // 18 rows x 32 cols
+    public TiledArrayGenerator map = new TiledArrayGenerator();
+    public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map.map, 1);
+
 
 
     public PlayingScreen(final TestGame game, String chosenFlavor, int numberOfIceCreams) {
@@ -63,11 +66,12 @@ public class PlayingScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         renderer.setView(camera);
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("ground");
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.map.getLayers().get("ground");
         for (int i = 0; i < 18; i++) {
             for (int j = 0; j < 32; j++) {
                 Cell cell = layer.getCell(j, i);
                 TiledMapTile tile = cell.getTile();
+
                 System.out.print(tile.getId() + " ");
             }
             System.out.println();
@@ -151,7 +155,9 @@ public class PlayingScreen implements Screen {
 
     @Override
     public void dispose() {
-        map.dispose();
+        map.map.dispose();
+        map.floorTiles.dispose();
+        map.storeTiles.dispose();
 
         truckTexture.dispose();
         font.dispose();
