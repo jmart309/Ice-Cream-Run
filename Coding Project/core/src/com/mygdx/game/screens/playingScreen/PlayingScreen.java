@@ -40,9 +40,9 @@ public class PlayingScreen implements Screen {
     private int counter = 0;
 
     // Background map
-//    public TiledMap map = new TmxMapLoader().load("testBackground.tmx"); // 18 rows x 32 cols
-    public TiledArrayGenerator map = new TiledArrayGenerator();
-    public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map.map, 1);
+    public TiledMap map = new TmxMapLoader().load("newBackground.tmx"); // 21 rows x 39 cols
+//    public TiledArrayGenerator map = new TiledArrayGenerator();
+    public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, 1);
 
 
 
@@ -63,7 +63,7 @@ public class PlayingScreen implements Screen {
         float truckWidth = 31;
         float truckHeight = 31;
 
-        truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.map.getLayers().get("ground"), truckHeight, truckWidth);
+        truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth);
 
         inputProcessor = new MyInputProcessor(truck);
         Gdx.input.setInputProcessor(inputProcessor);
@@ -159,10 +159,9 @@ public class PlayingScreen implements Screen {
 
     @Override
     public void dispose() {
-        map.map.dispose();
-        map.floorTiles.dispose();
-        map.storeTiles.dispose();
-
+        map.dispose();
+//        map.floorTiles.dispose();
+//        map.storeTiles.dispose();
         truckTexture.dispose();
         font.dispose();
     }
