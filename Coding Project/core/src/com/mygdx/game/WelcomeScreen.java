@@ -28,9 +28,9 @@ public class WelcomeScreen implements Screen {
     private Label titleLabel;
     private BitmapFont font;
     private String chosenFlavor = "";
-    public static int numberOfIceCreams = 0;
+    public static int numberOfIceCreams = 5;
     private TextButton easyButton, mediumButton, hardButton;
-    private int gameTimeInSeconds;
+    private int gameTimeInSeconds = 120;
 
     public WelcomeScreen(TestGame game) {
         this.game = game;
@@ -124,7 +124,7 @@ public class WelcomeScreen implements Screen {
         easyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gameTimeInSeconds = 30; // Easy: 30 seconds
+                gameTimeInSeconds = 120; // Easy: 30 seconds
             }
         });
         mediumButton.addListener(new ClickListener() {
@@ -136,7 +136,7 @@ public class WelcomeScreen implements Screen {
         hardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gameTimeInSeconds = 120; // Hard: 2 minutes
+                gameTimeInSeconds = 30; // Hard: 2 minutes
             }
         });
         positionButtons();

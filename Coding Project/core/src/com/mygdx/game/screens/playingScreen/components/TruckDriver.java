@@ -49,7 +49,7 @@ public class TruckDriver {
         truckRow = 2;
         truckCol = 0;
         mapGrid[truckRow][truckCol] = true; // Starting position
-        this.fuel =  20;
+        this.fuel =  100;
         totalfuel = fuel;
         totalIce = numberOfIceCreams;
         random = new Random();
