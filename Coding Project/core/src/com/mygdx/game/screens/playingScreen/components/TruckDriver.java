@@ -9,7 +9,7 @@ public class TruckDriver {
     public int fuel;
     int added_fuel = 0;
     public int truckX = 0; // x-coordinate on the map segment
-    public int truckY = 0; // y-coordinate on the map segment
+    public int truckY = 321; // y-coordinate on the map segment
     public int truckRow; // row in the mapGrid
     public int truckCol; // column in the mapGrid
     public boolean[][] mapGrid; // true: truck can go there, false: truck cannot go there
@@ -78,71 +78,55 @@ public class TruckDriver {
     }
 
     public boolean dispatchKeyEvent(int keycode) {
-        // Check if "W" key is pressed
-        if (keycode == Input.Keys.W) {
-            // Move the truck upwards on W & decrease fuel as we move
-            boolean collides = collisionDetection(truckX , truckY + 32);
-            if(collides == false){
-                truckY += 32;
-                fuel -= 1;
-            }
-            System.out.println("Truck moved up 30");
+        // Switch statement to handle key presses
+        switch(keycode) {
+            case Input.Keys.W:
+            case Input.Keys.UP:
+                // Move the truck upwards & decrease fuel as we move
+                boolean collidesUp = collisionDetection(truckX, truckY + 32);
+                if (!collidesUp) {
+                    truckY += 32;
+                    fuel -= 1;
+                    System.out.println("Truck moved up 32");
+                }
+                break;
+            case Input.Keys.S:
+            case Input.Keys.DOWN:
+                // Move the truck downwards & decrease fuel as we move
+                boolean collidesDown = collisionDetection(truckX, truckY - 32);
+                if (!collidesDown) {
+                    truckY -= 32;
+                    fuel -= 1;
+                    System.out.println("Truck moved down 32");
+                }
+                break;
+            case Input.Keys.A:
+            case Input.Keys.LEFT:
+                // Move the truck left & decrease fuel as we move
+                boolean collidesLeft = collisionDetection(truckX - 32, truckY);
+                if (!collidesLeft) {
+                    truckX -= 32;
+                    fuel -= 1;
+                    System.out.println("Truck moved left 32");
+                }
+                break;
+            case Input.Keys.D:
+            case Input.Keys.RIGHT:
+                // Move the truck right & decrease fuel as we move
+                boolean collidesRight = collisionDetection(truckX + 32, truckY);
+                if (!collidesRight) {
+                    truckX += 32;
+                    fuel -= 1;
+                    System.out.println("Truck moved right 32");
+                }
+                break;
+            default:
+                break;
         }
 
-        if (keycode == Input.Keys.D) {
-            // Move the truck straight on D
-            boolean collides = collisionDetection(truckX + 32 , truckY);
-            if (collides == false) {
-                truckX += 32;
-                fuel -= 1;
-            }
-            System.out.println("Truck moved right 30");
-        }
-
-        if (keycode == Input.Keys.S) {
-            // Move the truck to Downwards with S
-            boolean collides = collisionDetection(truckX , truckY - 32);
-            if (collides == false) {
-                truckY -= 32;
-                fuel -= 1;
-            }
-            System.out.println("Truck moved down 30");
-        }
-
-        if (keycode == Input.Keys.A){
-            boolean collides = collisionDetection(truckX - 32, truckY);
-            if (collides == false) {
-                truckX -= 32;
-                fuel -= 1;
-            }
-            System.out.println("Truck moves left 30");
-        }
-        return true;
+        return false;
     }
 
-    public boolean changeMapSegment(int keycode) {
-        if (keycode == Input.Keys.UP) {
-            System.out.println("UP");
-            if (truckRow < 3) truckRow++;
-            else return false;
-        }
-        if (keycode == Input.Keys.DOWN) {
-            System.out.println("DOWN");
-            if (truckRow > 0) truckRow--;
-            else return false;
-        }
-        if (keycode == Input.Keys.LEFT) {
-            System.out.println("LEFT");
-            if (truckCol > 0) truckCol--;
-            else return false;
-        }
-        if (keycode == Input.Keys.RIGHT) {
-            System.out.println("RIGHT");
-            if (truckCol < 3) truckCol++;
-            else return false;
-        }
-        return true;
-    }
 
 
 

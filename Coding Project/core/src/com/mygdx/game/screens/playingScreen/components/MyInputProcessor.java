@@ -17,12 +17,11 @@ public class MyInputProcessor implements InputProcessor {
             case Input.Keys.W:
             case Input.Keys.D:
             case Input.Keys.S:
-                return truck.dispatchKeyEvent(keycode);
             case Input.Keys.UP:
             case Input.Keys.DOWN:
             case Input.Keys.LEFT:
             case Input.Keys.RIGHT:
-                return truck.changeMapSegment(keycode);
+                return truck.dispatchKeyEvent(keycode);
         }
         return false;
     }
