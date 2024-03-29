@@ -114,7 +114,7 @@ public class PlayingScreen implements Screen {
         float truckWidth = 31;
         float truckHeight = 31;
         game.batch.draw(truckTexture, truck.truckX, truck.truckY, truckWidth, truckHeight);
-
+        //
 
         // Draw the flavor and number of ice creams
         String flavorText = "Flavor: " + chosenFlavor;
