@@ -13,17 +13,10 @@ public class TruckDriver {
     public int fuel;
     int added_fuel = 0;
     public int truckX = 0; // x-coordinate on the map segment
-
     public int truckY = 320; // y-coordinate on the map segment
-
     public int moneyEarned = 0;
 
-    public int truckRow; // row in the mapGrid
-    public int truckCol; // column in the mapGrid
-    public boolean[][] mapGrid; // true: truck can go there, false: truck cannot go there
-    // (0, 0) on the mapGrid is the bottom left segment of the map
-    public int rows; // num rows in the mapGrid
-    public int cols;
+    private TiledArrayGenerator generator;
 
     float truckHeight;
     float truckWidth;
@@ -32,22 +25,12 @@ public class TruckDriver {
     TiledMapTileLayer collisionLayer;
     private Random random;
 
-    public TruckDriver(Game game, int rows, int cols, TiledMapTileLayer collisionLayer, float truckHeight, float truckWidth, int numberOfIceCreams) {
+    public TruckDriver(Game game, TiledArrayGenerator generator, TiledMapTileLayer collisionLayer, float truckHeight, float truckWidth, int numberOfIceCreams) {
         this.game = game;
-        this.rows = rows;
-        this.cols = cols;
         this.truckHeight = truckHeight;
         this.truckWidth = truckWidth;
+        this.generator = generator;
         this.collisionLayer = collisionLayer;
-        mapGrid = new boolean[rows][cols];
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                mapGrid[r][c] = false;
-            }
-        }
-        truckRow = 2;
-        truckCol = 0;
-        mapGrid[truckRow][truckCol] = true; // Starting position
         this.fuel =  100;
         totalfuel = fuel;
         totalIce = numberOfIceCreams;
@@ -193,6 +176,7 @@ public class TruckDriver {
                 System.out.println("space bar pressed");
                 boolean location = checkSell(this.truckX, this.truckY);
                 if(location){
+                    generator.sellAtLocation(this.truckX / 32, this.truckY / 32);
                     moneyEarned += 100;
                     System.out.println("adding score");
                 }

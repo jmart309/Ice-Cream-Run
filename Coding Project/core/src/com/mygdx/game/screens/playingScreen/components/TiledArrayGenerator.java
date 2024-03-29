@@ -17,15 +17,14 @@ public class TiledArrayGenerator extends Gdx {
     public TiledMap map;
     // grabs the tileset image and splits up the tiles into a 2d array
     public Texture floorTiles = new Texture(Gdx.files.internal("floors.png"));
-    public Texture grassTiles = new Texture(Gdx.files.internal("sheet.png"));
+//    public Texture grassTiles = new Texture(Gdx.files.internal("sheet.png"));
     public Texture storeTiles = new Texture(Gdx.files.internal("stores/stores.png"));
     public Texture trashTiles = new Texture(Gdx.files.internal("stores/trash.png"));
     public TextureRegion[][] floorTS = TextureRegion.split(floorTiles, 32, 32);
-    public TextureRegion[][] grassTS = TextureRegion.split(grassTiles, 32, 32);
+//    public TextureRegion[][] grassTS = TextureRegion.split(grassTiles, 32, 32);
     public TextureRegion[][] storeTS = TextureRegion.split(storeTiles, 32, 32);
     public TextureRegion[][] trashTS = TextureRegion.split(trashTiles, 32, 32);
     public TextureRegion[][] iceCreamStore = new TextureRegion[2][3];
-    public Cell sellHere = new Cell();
     public ArrayList<Tuple<Integer, Integer>> storeLocations = new ArrayList<>();
 
     TiledMapTileLayer connectToMid(int x, int y, int mid, int direction, Cell cell, TiledMapTileLayer layer) {
@@ -41,7 +40,6 @@ public class TiledArrayGenerator extends Gdx {
         int height = 22;
         int horizontalMainRoad = 10;
         int verticalMainRoad = 19;
-        sellHere.setTile(new StaticTiledMapTile(trashTS[0][1]));
 
         StaticTiledMapTile roadTile = new StaticTiledMapTile(floorTS[59][21]);
         roadTile.getProperties().put("road", true);
@@ -148,13 +146,20 @@ public class TiledArrayGenerator extends Gdx {
 
     public void placeStore(int x, int y) {
         TiledMapTileLayer storeLayer = (TiledMapTileLayer) map.getLayers().get("stores");
-        storeLayer.setCell(x, y, sellHere);
+        Cell cell = new Cell();
+        cell.setTile(new StaticTiledMapTile(trashTS[0][1]));
+        storeLayer.setCell(x, y, cell);
         y += 1;
         for (int row = 0; row < 2; row++) {
             for (int col = 0; col < 3; col++) {
                 storeLayer.getCell(x + col, y + row).setTile(new StaticTiledMapTile(iceCreamStore[row][col]));
             }
         }
+    }
+
+    public void sellAtLocation(int x, int y) {
+        TiledMapTileLayer storeLayer = (TiledMapTileLayer) map.getLayers().get("stores");
+        storeLayer.getCell(x, y).setTile(new StaticTiledMapTile(trashTS[0][2]));
     }
 
 

@@ -85,7 +85,7 @@ public class PlayingScreen implements Screen {
         storeGenerator.generateStores();
 
 
-        truck = new TruckDriver(game,4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth,numberOfIceCreams );
+        truck = new TruckDriver(game, storeGenerator, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth,numberOfIceCreams );
 
         inputProcessor = new MyInputProcessor(truck);
         Gdx.input.setInputProcessor(inputProcessor);
@@ -142,11 +142,6 @@ public class PlayingScreen implements Screen {
         // End batch drawing
         game.batch.end();
 
-        // Draw target coordinates box
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(550, 220, 50, 50);
-        shapeRenderer.end();
 
         // Check if the truck reached target coordinates
         if (truck.truckX > 500 && truck.truckX < 600 && truck.truckY > 200 && truck.truckY < 300 && counter == 0) {
