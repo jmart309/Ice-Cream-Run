@@ -136,8 +136,12 @@ public class TiledArrayGenerator extends Gdx {
             if (checked.contains(newShop)) {
                 continue;
             }
+            Cell cell = new Cell();
+            cell.setTile(new StaticTiledMapTile(floorTS[59][21]));
+            cell.getTile().getProperties().put("road", true);
+            cell.getTile().getProperties().put("sellHere", false);
             placeStore(storeLocations.get(newShop).x, storeLocations.get(newShop).y);
-            groundLayer.getCell(storeLocations.get(newShop).x, storeLocations.get(newShop).y).getTile().getProperties().put("sellHere", false);
+            groundLayer.setCell(storeLocations.get(newShop).x, storeLocations.get(newShop).y, cell);
             checked.add(newShop);
         }
     }

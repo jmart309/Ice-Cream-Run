@@ -83,7 +83,7 @@ public class PlayingScreen implements Screen {
         storeGenerator.generateStores();
 
 
-        truck = new TruckDriver(game,4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth);
+        truck = new TruckDriver(game,4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth,numberOfIceCreams );
 
         inputProcessor = new MyInputProcessor(truck);
         Gdx.input.setInputProcessor(inputProcessor);
@@ -116,9 +116,14 @@ public class PlayingScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+
         // Render the background map
         renderer.setView(camera);
         renderer.render();
+
+        String gas = "Amount of gas left: " + truck.fuel;
+        String money = "Earnings: $" + truck.moneyEarned;
+
 
         // Begin batch drawing
         game.batch.begin();
@@ -130,7 +135,7 @@ public class PlayingScreen implements Screen {
         font.draw(game.batch, "Flavor: " + chosenFlavor, 20, Gdx.graphics.getHeight() - 20);
         font.draw(game.batch, "Number of Ice Creams: " + numberOfIceCreams, 20, Gdx.graphics.getHeight() - 50);
         font.draw(game.batch, "Amount of gas left: " + truck.fuel, 20, Gdx.graphics.getHeight() - 80);
-        font.draw(game.batch, "Earnings: $" + earnedMoney, 20, Gdx.graphics.getHeight() - 110);
+        font.draw(game.batch, "Earnings: $" + truck.moneyEarned, 20, Gdx.graphics.getHeight() - 110);
 
         // End batch drawing
         game.batch.end();

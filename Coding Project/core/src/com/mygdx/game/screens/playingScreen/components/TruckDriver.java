@@ -1,15 +1,12 @@
 package com.mygdx.game.screens.playingScreen.components;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.Game;
 import com.mygdx.game.ScoreScreen;
 import java.util.Random;
 
-
-import java.util.Iterator;
-
-import static com.mygdx.game.WelcomeScreen.numberOfIceCreams;
+//import static com.mygdx.game.WelcomeScreen.numberOfIceCreams;
 
 public class TruckDriver {
     private Game game;
@@ -18,6 +15,8 @@ public class TruckDriver {
     public int truckX = 0; // x-coordinate on the map segment
 
     public int truckY = 320; // y-coordinate on the map segment
+
+    public int moneyEarned = 0;
 
     public int truckRow; // row in the mapGrid
     public int truckCol; // column in the mapGrid
@@ -33,7 +32,7 @@ public class TruckDriver {
     TiledMapTileLayer collisionLayer;
     private Random random;
 
-    public TruckDriver(Game game, int rows, int cols, TiledMapTileLayer collisionLayer, float truckHeight, float truckWidth) {
+    public TruckDriver(Game game, int rows, int cols, TiledMapTileLayer collisionLayer, float truckHeight, float truckWidth, int numberOfIceCreams) {
         this.game = game;
         this.rows = rows;
         this.cols = cols;
@@ -61,13 +60,17 @@ public class TruckDriver {
         float tileHeight = collisionLayer.getTileHeight();
         boolean collisionX = false;
         //boolean collisionY = false;
+
         System.out.println((int) (truckX / tileWidth) +  ", " +  (int) (truckY / tileHeight));
+        /*
         Iterator<String> keysIterator = collisionLayer.getCell(4, 16).getTile().getProperties().getKeys();
 
         while (keysIterator.hasNext()) {
             String key = keysIterator.next();
             System.out.println(key);
         }
+
+         */
 
         collisionX = collisionLayer.getCell((int) (truckX / tileWidth), (int) ((truckY + truckHeight) / tileHeight))
                 .getTile().getProperties().containsKey("road");
@@ -93,8 +96,41 @@ public class TruckDriver {
 
     public void checkFuelAndChangeScreen() {
         if (fuel <= 0) {
-            game.setScreen(new ScoreScreen(game, totalfuel, totalIce - numberOfIceCreams)); // Show score screen with total fuel used -for now
+            //game.setScreen(new ScoreScreen(game, totalfuel, totalIce - totalfuel)); // Show score screen with total fuel used -for now
         }
+    }
+
+
+    private boolean checkSell(int truckX, int truckY){
+        float tileWidth = collisionLayer.getTileWidth();
+        float tileHeight = collisionLayer.getTileHeight();
+        boolean location = false;
+        boolean sell = false;
+
+
+        location = collisionLayer.getCell((int) (truckX / tileWidth), (int) ((truckY + truckHeight) / tileHeight))
+                .getTile().getProperties().containsKey("sellHere");
+
+        if (location == true){
+            sell = (boolean) collisionLayer.getCell((int) (truckX / tileWidth), (int) ((truckY + truckHeight) / tileHeight))
+                    .getTile().getProperties().get("sellHere");
+
+            System.out.println("The value of green tile is " + sell);
+            if(sell){
+                return false;
+            }
+            collisionLayer.getCell((int) (truckX / tileWidth), (int) ((truckY + truckHeight) / tileHeight))
+                    .getTile().getProperties().put("sellHere", true);
+
+        }
+
+
+
+        System.out.println(location);
+
+
+        return location;
+
     }
 
     public boolean dispatchKeyEvent(int keycode) {
@@ -146,7 +182,14 @@ public class TruckDriver {
                     System.out.println("Truck moved right 32");
                 }
                 break;
-            default:
+            case Input.Keys.SPACE:
+                System.out.println("space bar pressed");
+                boolean location = checkSell(this.truckX, this.truckY);
+                if(location){
+                    moneyEarned += 100;
+                    System.out.println("adding score");
+                }
+                default:
                 break;
         }
 
