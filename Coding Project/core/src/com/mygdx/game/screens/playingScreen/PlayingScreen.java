@@ -158,7 +158,7 @@ public class PlayingScreen implements Screen {
         gameOver = truck.checkGameOver();
 
         // Update the timer
-        if (timeLeft > 0 && gameOver == false ) {
+        if (timeLeft > 0 && gameOver == false && truck.fuel > 0 ) {
             timeLeft -= delta;
             // Draw the remaining time
             game.batch.begin();
