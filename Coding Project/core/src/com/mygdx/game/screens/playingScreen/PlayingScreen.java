@@ -55,6 +55,8 @@ public class PlayingScreen implements Screen {
     private int counter = 0;
     private float timeLeft;
 
+    private boolean gameOver = false;
+
     // Background map
     public TiledMap map = new TmxMapLoader().load("newBackground.tmx"); // 21 rows x 39 cols
     public TiledArrayGenerator storeGenerator = new TiledArrayGenerator(map);
@@ -153,8 +155,10 @@ public class PlayingScreen implements Screen {
             System.out.println("Truck reached target coordinates!");
         }
 
+        gameOver = truck.checkGameOver();
+
         // Update the timer
-        if (timeLeft > 0) {
+        if (timeLeft > 0 && gameOver == false ) {
             timeLeft -= delta;
             // Draw the remaining time
             game.batch.begin();
@@ -162,7 +166,8 @@ public class PlayingScreen implements Screen {
             game.batch.end();
         } else {
             // Time is up - transition to the score screen
-            game.setScreen(new ScoreScreen(game, 0, (int) timeLeft));
+            game.setScreen(new ScoreScreen(game, truck.fuel, truck.moneyEarned,(int) timeLeft ));
+            //(int) timeLeft)
             dispose();
         }
     }

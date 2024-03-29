@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,19 +17,22 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class ScoreScreen implements Screen {
     private Game game;
     private int totalFuelUsed;
-    private int iceCreamSold;
+    private int moneyEarned;
     private Stage stage;
     private Label scoreLabel;
     private BitmapFont font;
 
-    public ScoreScreen(Game game, int totalFuelUsed, int IceCreamSold) {
+    private int timeLeft;
+
+    public ScoreScreen(Game game, int totalFuelUsed, int moneyEarned, int timeLeft) {
         this.game = game;
         this.totalFuelUsed = totalFuelUsed;
-        this.iceCreamSold = iceCreamSold;
+        this.moneyEarned = moneyEarned;
         this.stage = new Stage(new ScreenViewport());
+        this.timeLeft = timeLeft;
         font = new BitmapFont();
         font.getData().setScale(2);
-        scoreLabel = new Label("Total Fuel Used: " + totalFuelUsed + "\nIce Creams Sold: " + iceCreamSold, // Display ice creams sold
+        scoreLabel = new Label("Total Fuel Used: " + totalFuelUsed + "\nEarnings: " + moneyEarned + "\nTime left: " + timeLeft, // Display ice creams sold
                 new Label.LabelStyle(font, font.getColor()));        Table table = new Table();
         table.setFillParent(true);
         table.center();

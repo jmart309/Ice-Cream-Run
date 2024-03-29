@@ -100,6 +100,13 @@ public class TruckDriver {
         }
     }
 
+    public boolean checkGameOver(){
+        if(moneyEarned == 400){
+            return true;
+        }
+        return false;
+    }
+
 
     private boolean checkSell(int truckX, int truckY){
         float tileWidth = collisionLayer.getTileWidth();
