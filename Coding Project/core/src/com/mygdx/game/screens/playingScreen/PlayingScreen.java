@@ -41,6 +41,7 @@ public class PlayingScreen implements Screen {
     // Game variables
     private String chosenFlavor;
     private int numberOfIceCreams;
+    ;
     private int earnedMoney;
     private int counter = 0;
 
@@ -71,7 +72,7 @@ public class PlayingScreen implements Screen {
         storeGenerator.generateStores();
 
 
-        truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth);
+        truck = new TruckDriver(game,4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth);
 
         inputProcessor = new MyInputProcessor(truck);
         Gdx.input.setInputProcessor(inputProcessor);

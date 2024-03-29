@@ -28,7 +28,7 @@ public class WelcomeScreen implements Screen {
     private Label titleLabel;
     private BitmapFont font;
     private String chosenFlavor = "";
-    private int numberOfIceCreams = 0;
+    public static int numberOfIceCreams = 0;
 
     public WelcomeScreen(TestGame game) {
         this.game = game;

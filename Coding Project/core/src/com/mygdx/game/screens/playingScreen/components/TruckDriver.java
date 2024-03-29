@@ -2,10 +2,16 @@ package com.mygdx.game.screens.playingScreen.components;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.Game;
+import com.mygdx.game.ScoreScreen;
+
 
 import java.util.Iterator;
 
+import static com.mygdx.game.WelcomeScreen.numberOfIceCreams;
+
 public class TruckDriver {
+    private Game game;
     public int fuel;
     int added_fuel = 0;
     public int truckX = 0; // x-coordinate on the map segment
@@ -21,10 +27,12 @@ public class TruckDriver {
 
     float truckHeight;
     float truckWidth;
-
+    private int totalfuel;
+    private int totalIce;
     TiledMapTileLayer collisionLayer;
 
-    public TruckDriver(int rows, int cols, TiledMapTileLayer collisionLayer, float truckHeight, float truckWidth) {
+    public TruckDriver(Game game, int rows, int cols, TiledMapTileLayer collisionLayer, float truckHeight, float truckWidth) {
+        this.game = game;
         this.rows = rows;
         this.cols = cols;
         this.truckHeight = truckHeight;
@@ -40,7 +48,8 @@ public class TruckDriver {
         truckCol = 0;
         mapGrid[truckRow][truckCol] = true; // Starting position
         this.fuel =  100;
-
+        totalfuel = fuel;
+        totalIce = numberOfIceCreams;
     }
 
 
@@ -79,6 +88,12 @@ public class TruckDriver {
 
     }
 
+    public void checkFuelAndChangeScreen() {
+        if (fuel <= 0) {
+            game.setScreen(new ScoreScreen(game, totalfuel, totalIce - numberOfIceCreams)); // Show score screen with total fuel used -for now
+        }
+    }
+
     public boolean dispatchKeyEvent(int keycode) {
         // Switch statement to handle key presses
         switch(keycode) {
@@ -89,6 +104,7 @@ public class TruckDriver {
                 if (collidesUp) {
                     truckY += 32;
                     fuel -= 1;
+                    checkFuelAndChangeScreen();
                     System.out.println("Truck moved up 32");
                 }
                 break;
@@ -99,6 +115,7 @@ public class TruckDriver {
                 if (collidesDown) {
                     truckY -= 32;
                     fuel -= 1;
+                    checkFuelAndChangeScreen();
                     System.out.println("Truck moved down 32");
                 }
                 break;
@@ -109,8 +126,8 @@ public class TruckDriver {
                 boolean collidesLeft = collisionDetection(truckX - 32, truckY);
                 if (collidesLeft) {
                     truckX -= 32;
-
                     fuel -= 1;
+                    checkFuelAndChangeScreen();
                     System.out.println("Truck moved left 32");
                 }
                 break;
@@ -121,8 +138,8 @@ public class TruckDriver {
                 boolean collidesRight = collisionDetection(truckX + 32, truckY);
                 if (collidesRight) {
                     truckX += 32;
-
                     fuel -= 1;
+                    checkFuelAndChangeScreen();
                     System.out.println("Truck moved right 32");
                 }
                 break;
