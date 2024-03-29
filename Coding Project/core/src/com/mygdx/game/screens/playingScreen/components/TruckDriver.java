@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.Game;
 import com.mygdx.game.ScoreScreen;
+import java.util.Random;
 
 
 import java.util.Iterator;
@@ -30,6 +31,7 @@ public class TruckDriver {
     private int totalfuel;
     private int totalIce;
     TiledMapTileLayer collisionLayer;
+    private Random random;
 
     public TruckDriver(Game game, int rows, int cols, TiledMapTileLayer collisionLayer, float truckHeight, float truckWidth) {
         this.game = game;
@@ -47,9 +49,10 @@ public class TruckDriver {
         truckRow = 2;
         truckCol = 0;
         mapGrid[truckRow][truckCol] = true; // Starting position
-        this.fuel =  100;
+        this.fuel =  20;
         totalfuel = fuel;
         totalIce = numberOfIceCreams;
+        random = new Random();
     }
 
 
