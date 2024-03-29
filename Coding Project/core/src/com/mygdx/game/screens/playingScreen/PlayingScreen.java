@@ -46,7 +46,7 @@ public class PlayingScreen implements Screen {
 
     // Background map
     public TiledMap map = new TmxMapLoader().load("newBackground.tmx"); // 21 rows x 39 cols
-    public TiledArrayGenerator storeGenerator = new TiledArrayGenerator();
+    public TiledArrayGenerator storeGenerator = new TiledArrayGenerator(map);
     public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, 1);
 
 
@@ -68,7 +68,7 @@ public class PlayingScreen implements Screen {
         float truckHeight = 31;
 
         /* Generating store locations */
-        storeGenerator.generateStores(map);
+        storeGenerator.generateStores();
 
 
         truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth);

@@ -1,7 +1,6 @@
 package com.mygdx.game.screens.playingScreen.components;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
@@ -36,8 +35,8 @@ public class TiledArrayGenerator extends Gdx {
         return layer;
     }
 
-    public TiledArrayGenerator() {
-        // Window size: 1280 x 704
+    public TiledArrayGenerator(TiledMap map) {
+        // Window size: 1248 x 672
         int width = 40;
         int height = 22;
         int horizontalMainRoad = 10;
@@ -45,57 +44,58 @@ public class TiledArrayGenerator extends Gdx {
         sellHere.setTile(new StaticTiledMapTile(trashTS[0][1]));
 
         StaticTiledMapTile roadTile = new StaticTiledMapTile(floorTS[59][21]);
-        roadTile.getProperties().put("blocked", true);
+        roadTile.getProperties().put("road", true);
 
-        map = new TiledMap();
-        MapLayers layers = map.getLayers();
-        TiledMapTileLayer layer = new TiledMapTileLayer(width, height, 32, 32);
-
-        // Initializes to grass tiles
-        for (int x = 0; x < width; x++) {
-            Cell grassCell = new Cell();
-            grassCell.setTile(new StaticTiledMapTile(grassTS[6][6]));
-            for (int y = 0; y < height; y++) {
-                layer.setCell(x, y, grassCell);
-            }
-        }
-
-        Cell roadCell = new Cell();
-        roadCell.setTile(roadTile);
-        // Creates the main roads
-        for (int x = 0; x < width; x++) {
-            layer.setCell(x, horizontalMainRoad, roadCell);
-        }
-        for (int y = 0; y < height; y++) {
-            layer.setCell(verticalMainRoad, y, roadCell);
-        }
-
-        // Creates the roads on the top and bottom
-        int direction = 1;
-        int minLength, maxLength, prevLength, leftBound;
-        double scalingFactor;
-        for (int i = 0; i < 2; i++) { // once for above and below the horizontal main road
-            prevLength = width;
-            leftBound = 0;
-            for (int j = 0; j < 3; j++) { // 3 horizontal roads above and below
-//                scalingFactor = 0.7 + Math.random() * 0.2;
-//                int nextLength = (int) (prevLength * scalingFactor);
-                int nextLength = prevLength - 8;
-                leftBound += 3 + (int) (Math.random() * 2); // new leftbound
-                layer = connectToMid(leftBound, direction * (3 * (j + 1)) + horizontalMainRoad,
-                        horizontalMainRoad, direction * -1, roadCell, layer);
-                for (int k = 0; k < nextLength; k++) {
-                    layer.setCell(leftBound + k, direction * (3 * (j + 1)) + horizontalMainRoad, roadCell);
-                }
-                layer = connectToMid(leftBound + nextLength - 1, direction * (3 * (j + 1)) + horizontalMainRoad,
-                        horizontalMainRoad, direction * -1, roadCell, layer);
-                prevLength = nextLength;
-
-            }
-            direction *= -1;
-        }
-        layer.setName("ground");
-        layers.add(layer);
+//        map = new TiledMap();
+        this.map = map;
+//        MapLayers layers = map.getLayers();
+//        TiledMapTileLayer layer = new TiledMapTileLayer(width, height, 32, 32);
+//
+//        // Initializes to grass tiles
+//        for (int x = 0; x < width; x++) {
+//            Cell grassCell = new Cell();
+//            grassCell.setTile(new StaticTiledMapTile(grassTS[6][6]));
+//            for (int y = 0; y < height; y++) {
+//                layer.setCell(x, y, grassCell);
+//            }
+//        }
+//
+//        Cell roadCell = new Cell();
+//        roadCell.setTile(roadTile);
+//        // Creates the main roads
+//        for (int x = 0; x < width; x++) {
+//            layer.setCell(x, horizontalMainRoad, roadCell);
+//        }
+//        for (int y = 0; y < height; y++) {
+//            layer.setCell(verticalMainRoad, y, roadCell);
+//        }
+//
+//        // Creates the roads on the top and bottom
+//        int direction = 1;
+//        int prevLength, leftBound;
+//        double scalingFactor;
+//        for (int i = 0; i < 2; i++) { // once for above and below the horizontal main road
+//            prevLength = width;
+//            leftBound = 0;
+//            for (int j = 0; j < 3; j++) { // 3 horizontal roads above and below
+////                scalingFactor = 0.7 + Math.random() * 0.2;
+////                int nextLength = (int) (prevLength * scalingFactor);
+//                int nextLength = prevLength - 8;
+//                leftBound += 3 + (int) (Math.random() * 2); // new leftbound
+//                layer = connectToMid(leftBound, direction * (3 * (j + 1)) + horizontalMainRoad,
+//                        horizontalMainRoad, direction * -1, roadCell, layer);
+//                for (int k = 0; k < nextLength; k++) {
+//                    layer.setCell(leftBound + k, direction * (3 * (j + 1)) + horizontalMainRoad, roadCell);
+//                }
+//                layer = connectToMid(leftBound + nextLength - 1, direction * (3 * (j + 1)) + horizontalMainRoad,
+//                        horizontalMainRoad, direction * -1, roadCell, layer);
+//                prevLength = nextLength;
+//
+//            }
+//            direction *= -1;
+//        }
+//        layer.setName("ground");
+//        layers.add(layer);
         addStoresToList();
     }
 
@@ -127,24 +127,23 @@ public class TiledArrayGenerator extends Gdx {
         }
     }
 
-    public void generateStores(TiledMap fmap) {
-        TiledMapTileLayer testLayer = (TiledMapTileLayer) fmap.getLayers().get("ground");
-//        testLayer.getCell(0, 0).setTile(new StaticTiledMapTile(iceCreamStore[0][0]));
-//        testLayer.getCell(1, 0).setTile(new StaticTiledMapTile(iceCreamStore[0][1]));
-//        testLayer.getCell(2, 0).setTile(new StaticTiledMapTile(iceCreamStore[0][2]));
+    public void generateStores() {
+        TiledMapTileLayer groundLayer = (TiledMapTileLayer) map.getLayers().get("ground");
+
         HashSet<Integer> checked = new HashSet<>();
         while (checked.size() < 4) {
             int newShop = (int) (Math.random() * 19);
             if (checked.contains(newShop)) {
                 continue;
             }
-            placeStore(storeLocations.get(newShop).x, storeLocations.get(newShop).y, fmap);
+            placeStore(storeLocations.get(newShop).x, storeLocations.get(newShop).y);
+            groundLayer.getCell(storeLocations.get(newShop).x, storeLocations.get(newShop).y).getTile().getProperties().put("sellHere", false);
             checked.add(newShop);
         }
     }
 
-    public void placeStore(int x, int y, TiledMap fmap) {
-        TiledMapTileLayer storeLayer = (TiledMapTileLayer) fmap.getLayers().get("stores");
+    public void placeStore(int x, int y) {
+        TiledMapTileLayer storeLayer = (TiledMapTileLayer) map.getLayers().get("stores");
         storeLayer.setCell(x, y, sellHere);
         y += 1;
         for (int row = 0; row < 2; row++) {
