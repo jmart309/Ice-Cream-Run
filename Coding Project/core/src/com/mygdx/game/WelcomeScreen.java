@@ -28,7 +28,9 @@ public class WelcomeScreen implements Screen {
     private Label titleLabel;
     private BitmapFont font;
     private String chosenFlavor = "";
-    public static int numberOfIceCreams = 0;
+    private int numberOfIceCreams = 0;
+    private TextButton easyButton, mediumButton, hardButton;
+    private int gameTimeInSeconds;
 
     public WelcomeScreen(TestGame game) {
         this.game = game;
@@ -109,11 +111,37 @@ public class WelcomeScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 String username = usernameField.getText();
                 String password = passwordField.getText();
-                // You can add your logic here for handling the username and password
-                game.setScreen(new PlayingScreen(game, chosenFlavor, numberOfIceCreams)); // THIS WILL LEAD US TO VERSION 1 OF GAMEPLAY
+                game.setScreen(new PlayingScreen(game, chosenFlavor, numberOfIceCreams, gameTimeInSeconds)); // THIS WILL LEAD US TO VERSION 1 OF GAMEPLAY
                 //MapViewer.main(); // THIS WILL LEAD US TO OPENSTREEMAPS.
             }
         });
+
+
+        // game difficulty options
+        easyButton = new TextButton("Easy", buttonStyle);
+        mediumButton = new TextButton("Medium", buttonStyle);
+        hardButton = new TextButton("Hard", buttonStyle);
+
+        easyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameTimeInSeconds = 30; // Easy: 30 seconds
+            }
+        });
+        mediumButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameTimeInSeconds = 60; // Medium: 60 seconds
+            }
+        });
+        hardButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameTimeInSeconds = 120; // Hard: 2 minutes
+            }
+        });
+        positionButtons();
+
 
         stage.addActor(titleLabel);
         stage.addActor(usernameField);
@@ -122,7 +150,27 @@ public class WelcomeScreen implements Screen {
         stage.addActor(chocolateButton);
         stage.addActor(vanillaButton);
         stage.addActor(playButton);
+        stage.addActor(easyButton);
+        stage.addActor(mediumButton);
+        stage.addActor(hardButton);
     }
+
+    private void positionButtons() {
+        // Assuming each button has been initialized (e.g., in your show() method)
+
+        int buttonWidth = 200; // Width of each button, adjust as needed
+        int spacing = 20; // Space between buttons
+
+        // Calculate the starting X position to center the buttons as a group
+        float totalWidth = 3 * buttonWidth + 2 * spacing; // Total width of all buttons and spaces between them
+        float startX = (Gdx.graphics.getWidth() - totalWidth) / 2; // Starting X position to center the group
+
+        // Set the positions of the buttons
+        easyButton.setPosition(startX, easyButton.getY());
+        mediumButton.setPosition(startX + buttonWidth + spacing, mediumButton.getY());
+        hardButton.setPosition(startX + 2 * (buttonWidth + spacing), hardButton.getY());
+    }
+
 
     @Override
     public void render(float delta) {

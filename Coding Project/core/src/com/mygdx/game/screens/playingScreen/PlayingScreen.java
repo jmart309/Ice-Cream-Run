@@ -3,29 +3,27 @@ package com.mygdx.game.screens.playingScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.TestGame;
+import com.mygdx.game.WelcomeScreen;
 import com.mygdx.game.screens.playingScreen.components.TiledArrayGenerator;
 import com.mygdx.game.screens.playingScreen.components.TruckDriver;
 import com.mygdx.game.screens.playingScreen.components.MyInputProcessor;
-
-
-import java.util.Iterator;
-import com.mygdx.game.screens.playingScreen.components.Tuple;
-import com.mygdx.game.screens.playingScreen.components.TiledArrayGenerator;
-
 
 
 public class PlayingScreen implements Screen {
@@ -44,7 +42,7 @@ public class PlayingScreen implements Screen {
     ;
     private int earnedMoney;
     private int counter = 0;
-
+    private float timeLeft;
     // Background map
     public TiledMap map = new TmxMapLoader().load("newBackground.tmx"); // 21 rows x 39 cols
     public TiledArrayGenerator storeGenerator = new TiledArrayGenerator(map);
@@ -52,8 +50,9 @@ public class PlayingScreen implements Screen {
 
 
 
-    public PlayingScreen(final TestGame game, String chosenFlavor, int numberOfIceCreams) {
+    public PlayingScreen(final TestGame game, String chosenFlavor, int numberOfIceCreams, int gameTimeInSeconds) {
         this.game = game;
+        this.timeLeft = gameTimeInSeconds;
         this.chosenFlavor = chosenFlavor;
         this.numberOfIceCreams = numberOfIceCreams;
         this.shapeRenderer = new ShapeRenderer();
@@ -145,6 +144,42 @@ public class PlayingScreen implements Screen {
             earnedMoney += 10;
             System.out.println("Truck reached target coordinates!");
         }
+
+
+        // game over
+        if (timeLeft > 0) {
+            // Subtract the time since the last frame
+            timeLeft -= delta;
+
+            // Continue with game rendering and logic
+            ScreenUtils.clear(0, 0, 0.2f, 1);
+            camera.update();
+            game.batch.setProjectionMatrix(camera.combined);
+
+            // Existing game rendering code...
+            renderer.render();
+            game.batch.begin();
+            // Draw game elements here...
+            game.batch.end();
+
+            // Update game state, handle inputs, etc.
+
+            // Display the remaining time
+            game.batch.begin();
+            font.draw(game.batch, "Time left: " + Math.round(timeLeft) + "s", 20, Gdx.graphics.getHeight() - 140);
+            game.batch.end();
+
+        } else {
+            // Time is up - transition to game over or score summary screen
+
+            // This is a placeholder, you'd want to replace GameOverScreen with whatever screen you have for game over
+            // For instance, you could create a new Screen that shows the score and a message, and allows restarting
+            // Ensure you have such a screen or adjust this to your game's flow
+            game.setScreen(new GameOverScreen(game, earnedMoney)); // Assuming you pass the score to the game over screen
+
+            // Dispose of the current screen's resources if necessary
+            this.dispose();
+        }
     }
 
 
@@ -175,5 +210,93 @@ public class PlayingScreen implements Screen {
 //        map.storeTiles.dispose();
         truckTexture.dispose();
         font.dispose();
+    }
+
+    public static class GameOverScreen implements Screen {
+
+        private TestGame game;
+        private SpriteBatch batch;
+        private BitmapFont font;
+        private Stage stage;
+        private int score;
+
+        public GameOverScreen(TestGame game, int score) {
+            this.game = game;
+            this.score = score;
+            batch = new SpriteBatch();
+            font = new BitmapFont();
+            stage = new Stage();
+            Gdx.input.setInputProcessor(stage);
+
+            createUI();
+        }
+
+        private void createUI() {
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.font = font;
+            labelStyle.fontColor = Color.WHITE;
+
+            Label gameOverLabel = new Label("Game Over!", labelStyle);
+            gameOverLabel.setPosition(Gdx.graphics.getWidth() / 2 - gameOverLabel.getWidth() / 2, Gdx.graphics.getHeight() - 100);
+
+            Label scoreLabel = new Label("Score: " + score, labelStyle);
+            scoreLabel.setPosition(Gdx.graphics.getWidth() / 2 - scoreLabel.getWidth() / 2, Gdx.graphics.getHeight() - 150);
+
+            TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+            textButtonStyle.font = font;
+            textButtonStyle.fontColor = Color.WHITE;
+
+            TextButton restartButton = new TextButton("Restart", textButtonStyle);
+            restartButton.setPosition(Gdx.graphics.getWidth() / 2 - restartButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - restartButton.getHeight());
+            restartButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    // Restart the game by setting the screen to a new instance of PlayingScreen
+                    game.setScreen(new WelcomeScreen(game));
+                }
+            });
+
+            stage.addActor(gameOverLabel);
+            stage.addActor(scoreLabel);
+            stage.addActor(restartButton);
+        }
+
+        @Override
+        public void show() {
+
+        }
+
+        @Override
+        public void render(float delta) {
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+            stage.draw();
+        }
+
+        @Override
+        public void resize(int width, int height) {
+            stage.getViewport().update(width, height, true);
+        }
+
+        @Override
+        public void pause() {
+        }
+
+        @Override
+        public void resume() {
+        }
+
+        @Override
+        public void hide() {
+        }
+
+        @Override
+        public void dispose() {
+            stage.dispose();
+            batch.dispose();
+            font.dispose();
+        }
     }
 }
