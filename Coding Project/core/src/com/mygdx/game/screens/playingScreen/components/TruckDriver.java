@@ -9,7 +9,9 @@ public class TruckDriver {
     public int fuel;
     int added_fuel = 0;
     public int truckX = 0; // x-coordinate on the map segment
-    public int truckY = 321; // y-coordinate on the map segment
+
+    public int truckY = 320; // y-coordinate on the map segment
+
     public int truckRow; // row in the mapGrid
     public int truckCol; // column in the mapGrid
     public boolean[][] mapGrid; // true: truck can go there, false: truck cannot go there
@@ -56,21 +58,21 @@ public class TruckDriver {
         }
 
         collisionX = collisionLayer.getCell((int) (truckX / tileWidth), (int) ((truckY + truckHeight) / tileHeight))
-                .getTile().getProperties().containsKey("blocked");
+                .getTile().getProperties().containsKey("road");
 
         if(collisionX == false){
             collisionX = collisionLayer.getCell((int) (truckX / tileWidth), (int) ((truckY) / tileHeight))
-                    .getTile().getProperties().containsKey("blocked");
+                    .getTile().getProperties().containsKey("road");
         }
 
         if(collisionX == false){
             collisionX = collisionLayer.getCell((int) ((truckX + truckWidth) / tileWidth), (int) ((truckY + truckHeight) / tileHeight))
-                    .getTile().getProperties().containsKey("blocked");
+                    .getTile().getProperties().containsKey("road");
         }
 
         if(collisionX == false){
             collisionX = collisionLayer.getCell((int) ((truckX + truckWidth) / tileWidth), (int) ((truckY) / tileHeight))
-                    .getTile().getProperties().containsKey("blocked");
+                    .getTile().getProperties().containsKey("road");
         }
         return collisionX;
 
@@ -84,7 +86,7 @@ public class TruckDriver {
             case Input.Keys.UP:
                 // Move the truck upwards & decrease fuel as we move
                 boolean collidesUp = collisionDetection(truckX, truckY + 32);
-                if (!collidesUp) {
+                if (collidesUp) {
                     truckY += 32;
                     fuel -= 1;
                     System.out.println("Truck moved up 32");
@@ -94,7 +96,7 @@ public class TruckDriver {
             case Input.Keys.DOWN:
                 // Move the truck downwards & decrease fuel as we move
                 boolean collidesDown = collisionDetection(truckX, truckY - 32);
-                if (!collidesDown) {
+                if (collidesDown) {
                     truckY -= 32;
                     fuel -= 1;
                     System.out.println("Truck moved down 32");
@@ -104,7 +106,7 @@ public class TruckDriver {
             case Input.Keys.LEFT:
                 // Move the truck left & decrease fuel as we move
                 boolean collidesLeft = collisionDetection(truckX - 32, truckY);
-                if (!collidesLeft) {
+                if (collidesLeft) {
                     truckX -= 32;
                     fuel -= 1;
                     System.out.println("Truck moved left 32");
@@ -114,7 +116,7 @@ public class TruckDriver {
             case Input.Keys.RIGHT:
                 // Move the truck right & decrease fuel as we move
                 boolean collidesRight = collisionDetection(truckX + 32, truckY);
-                if (!collidesRight) {
+                if (collidesRight) {
                     truckX += 32;
                     fuel -= 1;
                     System.out.println("Truck moved right 32");
