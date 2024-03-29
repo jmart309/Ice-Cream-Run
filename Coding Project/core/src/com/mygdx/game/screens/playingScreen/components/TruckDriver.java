@@ -104,20 +104,24 @@ public class TruckDriver {
                 break;
             case Input.Keys.A:
             case Input.Keys.LEFT:
+                if (truckX - 32 < 0) return false;
                 // Move the truck left & decrease fuel as we move
                 boolean collidesLeft = collisionDetection(truckX - 32, truckY);
                 if (collidesLeft) {
                     truckX -= 32;
+
                     fuel -= 1;
                     System.out.println("Truck moved left 32");
                 }
                 break;
             case Input.Keys.D:
             case Input.Keys.RIGHT:
+                if (truckX + 32 >= 1248) return false;
                 // Move the truck right & decrease fuel as we move
                 boolean collidesRight = collisionDetection(truckX + 32, truckY);
                 if (collidesRight) {
                     truckX += 32;
+
                     fuel -= 1;
                     System.out.println("Truck moved right 32");
                 }
