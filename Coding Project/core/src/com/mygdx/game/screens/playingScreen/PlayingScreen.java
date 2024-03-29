@@ -21,7 +21,12 @@ import com.mygdx.game.screens.playingScreen.components.TiledArrayGenerator;
 import com.mygdx.game.screens.playingScreen.components.TruckDriver;
 import com.mygdx.game.screens.playingScreen.components.MyInputProcessor;
 
+
 import java.util.Iterator;
+import com.mygdx.game.screens.playingScreen.components.Tuple;
+import com.mygdx.game.screens.playingScreen.components.TiledArrayGenerator;
+
+
 
 public class PlayingScreen implements Screen {
     final TestGame game;
@@ -41,13 +46,12 @@ public class PlayingScreen implements Screen {
 
     // Background map
     public TiledMap map = new TmxMapLoader().load("newBackground.tmx"); // 21 rows x 39 cols
-//    public TiledArrayGenerator map = new TiledArrayGenerator();
+    public TiledArrayGenerator storeGenerator = new TiledArrayGenerator();
     public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, 1);
 
 
 
     public PlayingScreen(final TestGame game, String chosenFlavor, int numberOfIceCreams) {
-
         this.game = game;
         this.chosenFlavor = chosenFlavor;
         this.numberOfIceCreams = numberOfIceCreams;
@@ -62,6 +66,10 @@ public class PlayingScreen implements Screen {
 
         float truckWidth = 31;
         float truckHeight = 31;
+
+        /* Generating store locations */
+        storeGenerator.generateStores(map);
+
 
         truck = new TruckDriver(4, 4, (TiledMapTileLayer) map.getLayers().get("ground"), truckHeight, truckWidth);
 
@@ -81,6 +89,8 @@ public class PlayingScreen implements Screen {
 //            System.out.println();
 //        }
     }
+
+
     @Override
     public void show() {
 
