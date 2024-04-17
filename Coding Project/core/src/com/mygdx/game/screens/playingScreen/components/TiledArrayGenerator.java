@@ -134,14 +134,18 @@ public class TiledArrayGenerator extends Gdx {
                 staticNumTiles.add(new StaticTiledMapTile(numberTS[i][j]));
             }
         }
-        for (int x = 0; x < 6; x++) {
+        for (int x = 0; x < 7; x++) {
             for (int y = 0; y < 5; y++) {
-                Cell rightCell = new Cell();
-                rightCell.setTile(staticNumTiles.get(graph.nodeSystem[x][y].rightCost - 1));
-                numberLayer.setCell((x * 5 + 7), (y * 4 + 2), rightCell);
-                Cell upCell = new Cell();
-                upCell.setTile(staticNumTiles.get(graph.nodeSystem[x][y].upCost - 1));
-                numberLayer.setCell((x * 5 + 4), (y * 4 + 4), upCell);
+                if (x < 6) {
+                    Cell rightCell = new Cell();
+                    rightCell.setTile(staticNumTiles.get(graph.nodeSystem[x][y].rightCost - 1));
+                    numberLayer.setCell((x * 5 + 7), (y * 4 + 2), rightCell);
+                }
+                if (y < 4) {
+                    Cell upCell = new Cell();
+                    upCell.setTile(staticNumTiles.get(graph.nodeSystem[x][y].upCost - 1));
+                    numberLayer.setCell((x * 5 + 4), (y * 4 + 4), upCell);
+                }
             }
         }
         map.getLayers().add(numberLayer);
