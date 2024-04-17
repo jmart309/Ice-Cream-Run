@@ -27,6 +27,7 @@ public class TiledArrayGenerator extends Gdx {
     public TextureRegion[][] iceCreamStore = new TextureRegion[2][3];
     public ArrayList<Tuple<Integer, Integer>> storeLocations = new ArrayList<>();
     public Graph graph = new Graph();
+    public HashSet<Integer> checked;
 
     TiledMapTileLayer connectToMid(int x, int y, int mid, int direction, Cell cell, TiledMapTileLayer layer) {
         for (int i = 1; i < Math.abs(y - mid); i++) {
@@ -44,6 +45,7 @@ public class TiledArrayGenerator extends Gdx {
 
         StaticTiledMapTile roadTile = new StaticTiledMapTile(floorTS[59][21]);
         roadTile.getProperties().put("road", true);
+        checked = new HashSet<>();
 
 //        map = new TiledMap();
         this.map = map;
@@ -150,7 +152,6 @@ public class TiledArrayGenerator extends Gdx {
     public void generateStores() {
         TiledMapTileLayer groundLayer = (TiledMapTileLayer) map.getLayers().get("ground");
 
-        HashSet<Integer> checked = new HashSet<>();
         while (checked.size() < 4) {
             int newShop = (int) (Math.random() * 19);
             if (checked.contains(newShop)) {
