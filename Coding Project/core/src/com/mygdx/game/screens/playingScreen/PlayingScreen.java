@@ -29,7 +29,13 @@ import com.mygdx.game.TestGame;
 import com.mygdx.game.screens.playingScreen.components.TiledArrayGenerator;
 import com.mygdx.game.screens.playingScreen.components.TruckDriver;
 import com.mygdx.game.screens.playingScreen.components.MyInputProcessor;
-
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapLayer;
+import java.util.Iterator;
+import com.mygdx.game.screens.playingScreen.components.Tuple;
+import com.mygdx.game.screens.playingScreen.components.TiledArrayGenerator;
 
 import java.util.Iterator;
 import com.mygdx.game.screens.playingScreen.components.Tuple;
@@ -50,7 +56,7 @@ public class PlayingScreen implements Screen {
     // Game variables
     private String chosenFlavor;
     private int numberOfIceCreams;
-    ;
+
     private int earnedMoney;
     private int counter = 0;
     private float timeLeft;
@@ -75,6 +81,7 @@ public class PlayingScreen implements Screen {
         font.setColor(Color.WHITE); // Set font color
         font.getData().setScale(1.5f); // Scale the font size
         truckTexture = new Texture(Gdx.files.internal("iscream_truck.png"));
+        //truckTexture = new Texture(Gdx.files.internal("motorcycle.png"));
         //float truckWidth = truckTexture.getWidth() / 3;
         //float truckHeight = truckTexture.getHeight() / 3;
 
