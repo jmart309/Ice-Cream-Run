@@ -3,20 +3,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.screens.playingScreen.PlayingScreen;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.graphics.Pixmap;
+
 
 import java.util.Map;
 
@@ -31,6 +36,8 @@ public class WelcomeScreen implements Screen {
     public static int numberOfIceCreams = 5;
     private TextButton easyButton, mediumButton, hardButton;
     private int gameTimeInSeconds = 120;
+    private SelectBox<String> vehicleSelectBox;
+
 
     public WelcomeScreen(TestGame game) {
         this.game = game;
@@ -104,6 +111,50 @@ public class WelcomeScreen implements Screen {
             }
         });
 
+
+/// car selection
+// Create and configure the SelectBoxStyle
+        SelectBoxStyle selectBoxStyle = new SelectBoxStyle();
+        selectBoxStyle.font = font;
+        selectBoxStyle.fontColor = Color.BLACK;
+
+// Create a simple drawable for selection highlighting
+        Pixmap pixmap = new Pixmap(100, 10, Pixmap.Format.RGB888);
+        pixmap.setColor(Color.FIREBRICK);  // Change the color as needed
+        pixmap.fill();
+        TextureRegionDrawable selectionDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose(); // Dispose pixmap after texture creation
+
+// Create a new Pixmap for the SelectBox background
+        Pixmap pixmapSelectBoxBackground = new Pixmap(350, 10, Pixmap.Format.RGB888);
+        pixmapSelectBoxBackground.setColor(Color.GRAY);  // Change the color as needed
+        pixmapSelectBoxBackground.fill();
+        TextureRegionDrawable selectBoxBackgroundDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmapSelectBoxBackground)));
+        pixmapSelectBoxBackground.dispose(); // Dispose pixmap after texture creation
+
+// Set the new background to the SelectBox
+        selectBoxStyle.background = selectBoxBackgroundDrawable;
+        selectBoxStyle.listStyle = new List.ListStyle();
+        selectBoxStyle.listStyle.font = font;
+        selectBoxStyle.listStyle.fontColorUnselected = Color.RED;
+        selectBoxStyle.listStyle.fontColorSelected = Color.WHITE;
+        selectBoxStyle.listStyle.background = selectBoxBackgroundDrawable;
+        selectBoxStyle.listStyle.selection = selectionDrawable;  // Use the created drawable for selection
+        selectBoxStyle.scrollStyle = new ScrollPane.ScrollPaneStyle();
+
+        // Configure and add the SelectBox to the stage
+        vehicleSelectBox = new SelectBox<>(selectBoxStyle);
+        vehicleSelectBox.setItems("Click Here for Car Selection", "Ice Cream Truck", "Fast Car", "Motorcycle");
+        vehicleSelectBox.setPosition(Gdx.graphics.getWidth() / 5 - vehicleSelectBox.getWidth() / 2, Gdx.graphics.getHeight() - 100);  // Adjust position as needed
+        vehicleSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Selected: " + vehicleSelectBox.getSelected());
+            }
+        });
+        stage.addActor(vehicleSelectBox);
+
+
         playButton = new TextButton("Play", buttonStyle);
         playButton.setPosition(Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - 3 * playButton.getHeight());
         playButton.addListener(new ClickListener() {
@@ -111,8 +162,9 @@ public class WelcomeScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 String username = usernameField.getText();
                 String password = passwordField.getText();
+                String selectedVehicle = vehicleSelectBox.getSelected();
                 // You can add your logic here for handling the username and password
-                game.setScreen(new PlayingScreen(game, chosenFlavor, numberOfIceCreams, gameTimeInSeconds));  // THIS WILL LEAD US TO VERSION 1 OF GAMEPLAY
+                game.setScreen(new PlayingScreen(game, chosenFlavor, numberOfIceCreams, gameTimeInSeconds, selectedVehicle));  // THIS WILL LEAD US TO VERSION 1 OF GAMEPLAY
                 //MapViewer.main(); // THIS WILL LEAD US TO OPENSTREEMAPS.
             }
         });
@@ -152,6 +204,8 @@ public class WelcomeScreen implements Screen {
         stage.addActor(easyButton);
         stage.addActor(mediumButton);
         stage.addActor(hardButton);
+
+
     }
 
     private void positionButtons() {

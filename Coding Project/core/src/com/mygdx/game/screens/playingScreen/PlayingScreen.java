@@ -70,7 +70,7 @@ public class PlayingScreen implements Screen {
 
 
 
-    public PlayingScreen(final TestGame game, String chosenFlavor, int numberOfIceCreams, int gameTimeInSeconds) {
+    public PlayingScreen(final TestGame game, String chosenFlavor, int numberOfIceCreams, int gameTimeInSeconds, String vehicleType) {
         this.game = game;
         this.timeLeft = gameTimeInSeconds;
         this.chosenFlavor = chosenFlavor;
@@ -80,8 +80,13 @@ public class PlayingScreen implements Screen {
         font = new BitmapFont();
         font.setColor(Color.WHITE); // Set font color
         font.getData().setScale(1.5f); // Scale the font size
-        truckTexture = new Texture(Gdx.files.internal("iscream_truck.png"));
-        //truckTexture = new Texture(Gdx.files.internal("motorcycle.png"));
+        if (vehicleType == "Fast Car"){
+            truckTexture = new Texture(Gdx.files.internal("fastCar.png"));
+        } else if (vehicleType == "Motorcycle"){
+            truckTexture = new Texture(Gdx.files.internal("motorcycle.png"));
+        } else {
+                truckTexture = new Texture(Gdx.files.internal("iscream_truck.png"));
+        }
         //float truckWidth = truckTexture.getWidth() / 3;
         //float truckHeight = truckTexture.getHeight() / 3;
 
