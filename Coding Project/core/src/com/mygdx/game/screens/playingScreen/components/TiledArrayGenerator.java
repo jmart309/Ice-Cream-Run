@@ -26,6 +26,7 @@ public class TiledArrayGenerator extends Gdx {
     public TextureRegion[][] trashTS = TextureRegion.split(trashTiles, 32, 32);
     public TextureRegion[][] iceCreamStore = new TextureRegion[2][3];
     public ArrayList<Tuple<Integer, Integer>> storeLocations = new ArrayList<>();
+    public Graph graph = new Graph();
 
     TiledMapTileLayer connectToMid(int x, int y, int mid, int direction, Cell cell, TiledMapTileLayer layer) {
         for (int i = 1; i < Math.abs(y - mid); i++) {
@@ -122,6 +123,27 @@ public class TiledArrayGenerator extends Gdx {
             for (int y = 0; y < 3; y++) {
                 iceCreamStore[x][y] = storeTS[3 - x][9 + y];
             }
+        }
+    }
+
+    public int getCost(int x, int y, int direction) {
+        x = (x - 4) / 5;
+        y = (y - 2) / 4;
+        switch (direction) {
+            // UP
+            case 0:
+                return graph.nodeSystem[x][y].upCost;
+            // RIGHT
+            case 1:
+                return graph.nodeSystem[x][y].rightCost;
+            // DOWN
+            case 2:
+                return graph.nodeSystem[x][y].downCost;
+            //LEFT
+            case 3:
+                return graph.nodeSystem[x][y].leftCost;
+            default:
+                return 0;
         }
     }
 
