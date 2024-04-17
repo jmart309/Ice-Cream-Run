@@ -17,11 +17,11 @@ public class TiledArrayGenerator extends Gdx {
     public TiledMap map;
     // grabs the tileset image and splits up the tiles into a 2d array
     public Texture floorTiles = new Texture(Gdx.files.internal("floors.png"));
-//    public Texture grassTiles = new Texture(Gdx.files.internal("sheet.png"));
+    public Texture numberTiles = new Texture(Gdx.files.internal("numbers.png"));
     public Texture storeTiles = new Texture(Gdx.files.internal("stores/stores.png"));
     public Texture trashTiles = new Texture(Gdx.files.internal("stores/trash.png"));
     public TextureRegion[][] floorTS = TextureRegion.split(floorTiles, 32, 32);
-//    public TextureRegion[][] grassTS = TextureRegion.split(grassTiles, 32, 32);
+    public TextureRegion[][] numberTS = TextureRegion.split(numberTiles, 32, 32);
     public TextureRegion[][] storeTS = TextureRegion.split(storeTiles, 32, 32);
     public TextureRegion[][] trashTS = TextureRegion.split(trashTiles, 32, 32);
     public TextureRegion[][] iceCreamStore = new TextureRegion[2][3];
@@ -37,67 +37,13 @@ public class TiledArrayGenerator extends Gdx {
     }
 
     public TiledArrayGenerator(TiledMap map) {
-        // Window size: 1248 x 672
-        int width = 40;
-        int height = 22;
-        int horizontalMainRoad = 10;
-        int verticalMainRoad = 19;
-
         StaticTiledMapTile roadTile = new StaticTiledMapTile(floorTS[59][21]);
         roadTile.getProperties().put("road", true);
         checked = new HashSet<>();
 
-//        map = new TiledMap();
         this.map = map;
-//        MapLayers layers = map.getLayers();
-//        TiledMapTileLayer layer = new TiledMapTileLayer(width, height, 32, 32);
-//
-//        // Initializes to grass tiles
-//        for (int x = 0; x < width; x++) {
-//            Cell grassCell = new Cell();
-//            grassCell.setTile(new StaticTiledMapTile(grassTS[6][6]));
-//            for (int y = 0; y < height; y++) {
-//                layer.setCell(x, y, grassCell);
-//            }
-//        }
-//
-//        Cell roadCell = new Cell();
-//        roadCell.setTile(roadTile);
-//        // Creates the main roads
-//        for (int x = 0; x < width; x++) {
-//            layer.setCell(x, horizontalMainRoad, roadCell);
-//        }
-//        for (int y = 0; y < height; y++) {
-//            layer.setCell(verticalMainRoad, y, roadCell);
-//        }
-//
-//        // Creates the roads on the top and bottom
-//        int direction = 1;
-//        int prevLength, leftBound;
-//        double scalingFactor;
-//        for (int i = 0; i < 2; i++) { // once for above and below the horizontal main road
-//            prevLength = width;
-//            leftBound = 0;
-//            for (int j = 0; j < 3; j++) { // 3 horizontal roads above and below
-////                scalingFactor = 0.7 + Math.random() * 0.2;
-////                int nextLength = (int) (prevLength * scalingFactor);
-//                int nextLength = prevLength - 8;
-//                leftBound += 3 + (int) (Math.random() * 2); // new leftbound
-//                layer = connectToMid(leftBound, direction * (3 * (j + 1)) + horizontalMainRoad,
-//                        horizontalMainRoad, direction * -1, roadCell, layer);
-//                for (int k = 0; k < nextLength; k++) {
-//                    layer.setCell(leftBound + k, direction * (3 * (j + 1)) + horizontalMainRoad, roadCell);
-//                }
-//                layer = connectToMid(leftBound + nextLength - 1, direction * (3 * (j + 1)) + horizontalMainRoad,
-//                        horizontalMainRoad, direction * -1, roadCell, layer);
-//                prevLength = nextLength;
-//
-//            }
-//            direction *= -1;
-//        }
-//        layer.setName("ground");
-//        layers.add(layer);
         addStoresToList();
+        placeFuelUsage();
     }
 
     private void addStoresToList() {
@@ -120,7 +66,7 @@ public class TiledArrayGenerator extends Gdx {
         storeLocations.add(new Tuple<>(31, 14));
         storeLocations.add(new Tuple<>(5, 18));
         storeLocations.add(new Tuple<>(20, 18));
-        System.out.println(storeLocations.size());
+        // Sets up the tiles for an ice cream store into a 2D array
         for (int x = 0; x < 2; x++) {
             for (int y = 0; y < 3; y++) {
                 iceCreamStore[x][y] = storeTS[3 - x][9 + y];
@@ -178,6 +124,27 @@ public class TiledArrayGenerator extends Gdx {
                 storeLayer.getCell(x + col, y + row).setTile(new StaticTiledMapTile(iceCreamStore[row][col]));
             }
         }
+    }
+
+    public void placeFuelUsage() {
+        TiledMapTileLayer numberLayer = new TiledMapTileLayer(38, 20, 32, 32);
+        ArrayList<StaticTiledMapTile> staticNumTiles = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 4; j++) {
+                staticNumTiles.add(new StaticTiledMapTile(numberTS[i][j]));
+            }
+        }
+        for (int x = 0; x < 6; x++) {
+            for (int y = 0; y < 5; y++) {
+                Cell rightCell = new Cell();
+                rightCell.setTile(staticNumTiles.get(graph.nodeSystem[x][y].rightCost - 1));
+                numberLayer.setCell((x * 5 + 7), (y * 4 + 2), rightCell);
+                Cell upCell = new Cell();
+                upCell.setTile(staticNumTiles.get(graph.nodeSystem[x][y].upCost - 1));
+                numberLayer.setCell((x * 5 + 4), (y * 4 + 4), upCell);
+            }
+        }
+        map.getLayers().add(numberLayer);
     }
 
     public void sellAtLocation(int x, int y) {
