@@ -5,8 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.ScoreScreen;
 
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 //import static com.mygdx.game.WelcomeScreen.numberOfIceCreams;
 
@@ -30,6 +29,8 @@ public class TruckDriver {
     TiledMapTileLayer collisionLayer;
     private Random random;
 
+    public int fastestRouteFuelUsage;
+
     public TruckDriver(Game game, TiledArrayGenerator generator, TiledMapTileLayer collisionLayer, float truckHeight, float truckWidth, int numberOfIceCreams) {
         this.game = game;
         this.truckHeight = truckHeight;
@@ -49,7 +50,135 @@ public class TruckDriver {
             yNodes.add(2 + i*4);
         }
 
+        this.fastestRouteFuelUsage = findShortestPath(generator);
+
     }
+
+    class Node {
+        int x, y;
+
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public double distanceTo(Node other) {
+            int xDistance = 5;
+            int yDistance = 4;
+
+            Integer xDifference = Math.abs(other.x - this.x) / xDistance;
+            Integer yDifference = Math.abs(other.y - this.y) / yDistance;
+
+            return (xDifference + yDifference) * 4.5;
+        }
+    }
+
+    public static Map<Integer, Map<Integer, Double>> createWeightedGraph(Node[] nodes) {
+        Map<Integer, Map<Integer, Double>> graph = new HashMap<>();
+        for (int i = 0; i < nodes.length; i++) {
+            Map<Integer, Double> weights = new HashMap<>();
+            for (int j = 0; j < nodes.length; j++) {
+                if (i != j) {
+                    double distance = nodes[i].distanceTo(nodes[j]);
+                    weights.put(j, distance);
+                }
+            }
+            graph.put(i, weights);
+        }
+        return graph;
+    }
+
+
+
+    static class NodeDistance {
+        int node;
+        double distance;
+
+        public NodeDistance(int node, double distance) {
+            this.node = node;
+            this.distance = distance;
+        }
+    }
+
+
+
+    public static List<Integer> nearestNeighbor(Map<Integer, Map<Integer, Double>> graph, int startNode) {
+        List<Integer> path = new ArrayList<>();
+        Set<Integer> unvisited = new HashSet<>(graph.keySet());
+
+        // Start from the given start node
+        int current = startNode;
+        path.add(current);
+        unvisited.remove(current);
+
+        while (!unvisited.isEmpty()) {
+            double minDistance = Double.MAX_VALUE;
+            int nearestNeighbor = -1;
+            for (int neighbor : graph.get(current).keySet()) {
+                if (unvisited.contains(neighbor) && graph.get(current).get(neighbor) < minDistance) {
+                    minDistance = graph.get(current).get(neighbor);
+                    nearestNeighbor = neighbor;
+                }
+            }
+            if (nearestNeighbor != -1) {
+                path.add(nearestNeighbor);
+                unvisited.remove(nearestNeighbor);
+                current = nearestNeighbor;
+            } else {
+                // If there's no unvisited neighbor, go back to the start node
+                path.add(startNode);
+                current = startNode;
+            }
+        }
+
+        return path;
+    }
+
+
+    private int findShortestPath(TiledArrayGenerator gen){
+        int index = 1;
+        Node[] nodes = new Node[5];
+        nodes[0] = new Node(0, 10);
+        for(Integer store: gen.checked){
+            Tuple<Integer, Integer> r = gen.storeLocations.get(store);
+            nodes[index] = new Node(r.x, r.y);
+            index++;
+        }
+
+        System.out.println(nodes[0] == null);
+        System.out.println(nodes[1] == null);
+        System.out.println(nodes[2] == null);
+        System.out.println(nodes[3] == null);
+        System.out.println(nodes[4] == null);
+
+        Map<Integer, Map<Integer, Double>> weightedGraph = createWeightedGraph(nodes);
+        List<Integer> shortestPath = nearestNeighbor(weightedGraph, 0);
+        int startNode = 0;
+        //Map<Integer, Double> shortestDistances = dijkstra(weightedGraph, startNode);
+        /*
+        for (Map.Entry<Integer, Double> entry : shortestDistances.entrySet()) {
+            int node = entry.getKey();
+            double distance = entry.getValue();
+            System.out.println("Shortest distance from node " + startNode + " to node " + node + ": " + distance);
+        }
+
+         */
+        System.out.println("Shortest path to discover all nodes starting from node " + startNode + ": ");
+        int totalWeight = 0;
+        for (int i = 0; i < shortestPath.size() - 1; i++) {
+            int currentNode = shortestPath.get(i);
+            int nextNode = shortestPath.get(i + 1);
+            double weight = weightedGraph.get(currentNode).get(nextNode);
+            totalWeight += weight;
+            System.out.println("Node " + currentNode + " -> Node " + nextNode + ", Weight: " + weight);
+        }
+        System.out.println("Total Weight of Shortest Path: " + totalWeight);
+
+        return totalWeight;
+
+    }
+
+
 
 
     private boolean collisionDetection(int x, int y){
