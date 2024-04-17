@@ -173,7 +173,7 @@ public class PlayingScreen implements Screen {
             game.batch.end();
         } else {
             // Time is up - transition to the score screen
-            game.setScreen(new ScoreScreen(game, truck.fuel, truck.moneyEarned,(int) timeLeft ));
+            game.setScreen(new ScoreScreen(game, truck.fuel, truck.moneyEarned,(int) timeLeft, truck.fastestRouteFuelUsage));
             //(int) timeLeft)
             dispose();
         }

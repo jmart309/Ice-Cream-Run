@@ -24,7 +24,7 @@ public class ScoreScreen implements Screen {
 
     private int timeLeft;
 
-    public ScoreScreen(Game game, int totalFuelUsed, int moneyEarned, int timeLeft) {
+    public ScoreScreen(Game game, int totalFuelUsed, int moneyEarned, int timeLeft, int fastestRoute) {
         this.game = game;
         this.totalFuelUsed = totalFuelUsed;
         this.moneyEarned = moneyEarned;
@@ -32,7 +32,7 @@ public class ScoreScreen implements Screen {
         this.timeLeft = timeLeft;
         font = new BitmapFont();
         font.getData().setScale(2);
-        scoreLabel = new Label("Total Fuel Used: " + totalFuelUsed + "\nEarnings: " + moneyEarned + "\nTime left: " + timeLeft, // Display ice creams sold
+        scoreLabel = new Label("Total Fuel Used: " + totalFuelUsed + "\nEarnings: " + moneyEarned + "\nTime left: " + timeLeft + "\nMost Efficient Fuel Consumption: " + (100 -fastestRoute), // Display ice creams sold
                 new Label.LabelStyle(font, font.getColor()));        Table table = new Table();
         table.setFillParent(true);
         table.center();
