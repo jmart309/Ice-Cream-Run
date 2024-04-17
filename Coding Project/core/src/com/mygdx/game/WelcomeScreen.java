@@ -112,27 +112,27 @@ public class WelcomeScreen implements Screen {
         });
 
 
-/// car selection
-// Create and configure the SelectBoxStyle
+    /// car selection
+    // Create and configure the SelectBoxStyle
         SelectBoxStyle selectBoxStyle = new SelectBoxStyle();
         selectBoxStyle.font = font;
         selectBoxStyle.fontColor = Color.BLACK;
 
-// Create a simple drawable for selection highlighting
+    // Create a simple drawable for selection highlighting
         Pixmap pixmap = new Pixmap(100, 10, Pixmap.Format.RGB888);
         pixmap.setColor(Color.FIREBRICK);  // Change the color as needed
         pixmap.fill();
         TextureRegionDrawable selectionDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose(); // Dispose pixmap after texture creation
 
-// Create a new Pixmap for the SelectBox background
+    // Create a new Pixmap for the SelectBox background
         Pixmap pixmapSelectBoxBackground = new Pixmap(350, 10, Pixmap.Format.RGB888);
         pixmapSelectBoxBackground.setColor(Color.GRAY);  // Change the color as needed
         pixmapSelectBoxBackground.fill();
         TextureRegionDrawable selectBoxBackgroundDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmapSelectBoxBackground)));
         pixmapSelectBoxBackground.dispose(); // Dispose pixmap after texture creation
 
-// Set the new background to the SelectBox
+    // Set the new background to the SelectBox
         selectBoxStyle.background = selectBoxBackgroundDrawable;
         selectBoxStyle.listStyle = new List.ListStyle();
         selectBoxStyle.listStyle.font = font;
